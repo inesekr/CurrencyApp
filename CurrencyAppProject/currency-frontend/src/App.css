@@ -1,0 +1,53 @@
+.App {
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 20px;
+  margin-top:30px;
+}
+
+.input-field {
+  flex: 1; 
+  margin-right: 20px; 
+}
+
+.d-flex {
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.label-left {
+  text-align: left;
+}
+
+.reverse {
+  margin-top: 30px;
+  width: auto; 
+  margin-right: 20px;
+}
+
+.amount-input {
+  display: flex;
+  width: 100%;
+  border: 1px solid #ced4da; 
+  border-radius: 8px;
+}
+
+.amount-input .input-group-text {
+  border: none; 
+}
+
+.amount-input input {
+  border: none;
+}
+
+.lighter {
+  font-weight: 300;
+}
