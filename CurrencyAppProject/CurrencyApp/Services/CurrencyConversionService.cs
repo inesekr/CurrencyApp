@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace CurrencyApp.Services
+﻿namespace CurrencyApp.Services
 {
     public class CurrencyConversionService : ICurrencyConversionService
     {
