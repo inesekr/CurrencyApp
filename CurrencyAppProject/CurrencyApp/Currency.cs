@@ -4,13 +4,11 @@
     {
         public string Code { get; set; }  
         public string Name { get; set; }  
-        public string Symbol { get; set; } 
 
-        public Currency(string code, string name, string symbol)
+        public Currency(string code, string name)
         {
             Code = code;
             Name = name;
-            Symbol = symbol;
         }
     }
 }

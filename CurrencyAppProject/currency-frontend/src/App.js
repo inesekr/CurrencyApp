@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 const CurrencyMappings = {
@@ -17,10 +17,8 @@ function App() {
   const [amount, setAmount] = useState(1);
 
   const formatAmount = (value) => {
-    // Removing existing commas and parsing the value as a number
     const numericValue = parseFloat(value.replace(/,/g, ""));
 
-    // If the value ends with a dot, don't add a comma
     if (value.endsWith(".")) {
       return (
         numericValue.toLocaleString(undefined, {
@@ -95,7 +93,6 @@ function App() {
   };
 
   const handleReverseCurrencies = () => {
-    // Swap fromCurrency and toCurrency
     setFromCurrency(toCurrency);
     setToCurrency(fromCurrency);
   };
@@ -106,7 +103,6 @@ function App() {
       <div className="input-group">
         <div className="input-field">
           <label className="label-left">Amount:</label>
-
           <div className="amount-input">
             <span className="input-group-text">
               {CurrencyMappings[fromCurrency].Symbol}
@@ -138,7 +134,6 @@ function App() {
             </select>
           </div>
         </div>
-
         <div className="reverse">
           <button
             onClick={handleReverseCurrencies}
@@ -147,7 +142,6 @@ function App() {
             ↔️ Reverse
           </button>
         </div>
-
         <div className="input-field">
           <label className="label-left">To:</label>
           <div className="currency-input">
@@ -168,13 +162,11 @@ function App() {
           </div>
         </div>
       </div>
-
       <div className="d-flex justify-content-end">
         <button onClick={handleConvert} className="btn btn-primary">
           Convert
         </button>
       </div>
-
       {Object.keys(conversionData).length > 0 && (
         <div className="result">
           <p>

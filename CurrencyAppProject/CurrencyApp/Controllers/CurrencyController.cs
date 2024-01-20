@@ -1,3 +1,4 @@
+using CurrencyApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyApp.Controllers
@@ -6,21 +7,11 @@ namespace CurrencyApp.Controllers
     [Route("[controller]")]
     public class CurrencyController : ControllerBase
     {
-        // Static mapping
-        private static readonly Dictionary<string, Currency> CurrencyMappings = new Dictionary<string, Currency>
-        {
-            { "USD", new Currency("USD", "United States Dollar", "$") },
-            { "EUR", new Currency("EUR", "Euro", "€") },
-            { "GBP", new Currency("GBP", "British Pounds", "£") },
-            { "JPY", new Currency("JPY", "Japanese Jen", "¥") },
-            { "CHF", new Currency("CHF", "Swiss Franc", "CHF") }
+        private readonly ICurrencyConversionService _currencyConversionService;
 
-        };
-        private readonly IHttpClientFactory _httpClientFactory;
-
-        public CurrencyController(IHttpClientFactory httpClientFactory)
+        public CurrencyController(ICurrencyConversionService currencyConversionService)
         {
-            _httpClientFactory = httpClientFactory;
+            _currencyConversionService = currencyConversionService;
         }
 
         [HttpGet]
@@ -28,45 +19,21 @@ namespace CurrencyApp.Controllers
         {
             try
             {
-                Currency fromCurrency = CurrencyMappings.GetValueOrDefault(fromCurrencyCode, new Currency(fromCurrencyCode, "Unknown", ""));
-                Currency toCurrency = CurrencyMappings.GetValueOrDefault(toCurrencyCode, new Currency(toCurrencyCode, "Unknown", ""));
-                string apiKey = "5782c482331b0ac5766abdf4";
-                string apiUrl = $"https://api.exchangerate-api.com/v4/latest/{fromCurrencyCode}";
+                object result = await _currencyConversionService.ConvertCurrency(fromCurrencyCode, toCurrencyCode, amount);
 
-                using (var client = _httpClientFactory.CreateClient())
+                if (result != null)
                 {
-                    var response = await client.GetFromJsonAsync<ExchangeRateApiResponse>(apiUrl);
-
-                    if (response != null && response.Rates.ContainsKey(toCurrencyCode))
-                    {
-                        decimal exchangeRate = response.Rates[toCurrencyCode];
-                        decimal result = amount * exchangeRate;
-
-                        return Ok(new
-                        {
-                            FromCurrency = fromCurrency.Name,
-                            ToCurrency = toCurrency.Name,
-                            Amount = amount,
-                            ExchangeRate = exchangeRate,
-                            Result = result
-                            //FromCurrencySymbol = fromCurrency.Symbol
-                        });
-                    }
+                    return Ok(result);
                 }
-
-                return BadRequest("Invalid from or to currency.");
+                else
+                {
+                    return BadRequest("Invalid from or to currency.");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-    }
-
-    public class ExchangeRateApiResponse
-    {
-        public decimal? ConversionRate { get; set; }
-  
-        public Dictionary<string, decimal> Rates { get; set; }
     }
 }

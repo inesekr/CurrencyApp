@@ -1,3 +1,6 @@
+using CurrencyApp.Services;
+using FluentAssertions.Common;
+
 namespace CurrencyApp
 {
     public class Program
@@ -13,14 +16,18 @@ namespace CurrencyApp
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddHttpClient();
-
+            builder.Services.AddScoped<ICurrencyConversionService, CurrencyConversionService>();
+       
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowReactApp",
-                    builder => builder.WithOrigins("http://localhost:3000") // Replace with your React app's actual URL
+                    builder => builder.WithOrigins("http://localhost:3000") 
                                         .AllowAnyHeader()
                                         .AllowAnyMethod());
             });
+
+            var configuration = builder.Configuration;
+            builder.Services.AddSingleton<IConfiguration>(configuration);
 
             var app = builder.Build();
 
@@ -33,7 +40,7 @@ namespace CurrencyApp
 
             app.UseAuthorization();
 
-            app.UseCors("AllowReactApp"); // Apply CORS policy
+            app.UseCors("AllowReactApp"); 
 
             app.MapControllers();
 

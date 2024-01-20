@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\CurrencyApp",
+    "\\CurrencyApp\\Controllers"
   ],
-  "SelectedNode": "\\CurrencyApp.sln",
+  "SelectedNode": "\\CurrencyApp\\Controllers\\CurrencyController.cs",
   "PreviewInSolutionExplorer": false
 }
