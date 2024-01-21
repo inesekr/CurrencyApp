@@ -4,38 +4,6 @@ using Moq;
 
 namespace CurrencyApp.Tests
 {
-    public class TestHttpClientFactory : IHttpClientFactory
-    {
-        private readonly HttpResponseMessage _response;
-
-        public TestHttpClientFactory(HttpResponseMessage response)
-        {
-            _response = response;
-        }
-
-        public HttpClient CreateClient(string name)
-        {
-            var handler = new MockHttpMessageHandler(_response);
-            var httpClient = new HttpClient(handler);
-            return httpClient;
-        }
-    }
-
-    public class MockHttpMessageHandler : HttpMessageHandler
-    {
-        private readonly HttpResponseMessage _response;
-
-        public MockHttpMessageHandler(HttpResponseMessage response)
-        {
-            _response = response;
-        }
-
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(_response);
-        }
-    }
-
     [TestClass]
     public class CurrencyConversionServiceTests
     {
@@ -72,6 +40,37 @@ namespace CurrencyApp.Tests
             Assert.AreEqual(120.0m, resultProperties["Result"]); 
             Assert.AreEqual("Euro", resultProperties["FromCurrency"]);
             Assert.AreEqual("United States Dollar", resultProperties["ToCurrency"]);
+        }
+    }
+    public class TestHttpClientFactory : IHttpClientFactory
+    {
+        private readonly HttpResponseMessage _response;
+
+        public TestHttpClientFactory(HttpResponseMessage response)
+        {
+            _response = response;
+        }
+
+        public HttpClient CreateClient(string name)
+        {
+            var handler = new MockHttpMessageHandler(_response);
+            var httpClient = new HttpClient(handler);
+            return httpClient;
+        }
+    }
+
+    public class MockHttpMessageHandler : HttpMessageHandler
+    {
+        private readonly HttpResponseMessage _response;
+
+        public MockHttpMessageHandler(HttpResponseMessage response)
+        {
+            _response = response;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(_response);
         }
     }
 }
